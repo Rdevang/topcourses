@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Cards from "./components/Cards";
+import Navbar from "./components/Navbar";
+import Filter from "./components/Filter";
+import { data } from "./data";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen flex flex-col">
+
+      <div>
+        <Navbar />
+      </div>
+      <div className="bg-[#4A4E69]">
+        <Filter data={data} />
+        <div className="w-11/12 max-w-[1200px] mx-auto flex flex-wrap justify-center items-center min-h-[50vh]">
+         
+          <Cards />
+        </div>
+      </div>
     </div>
   );
 }
-
 export default App;
