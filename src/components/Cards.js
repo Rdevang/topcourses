@@ -1,54 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import Spinner from "./Spinner";
+import React, { useState } from "react";
 import Card from "./Card";
-function Cards() {
-  const api = "https://codehelp-apis.vercel.app/api/get-top-courses";
-  console.log("error");
-  const [courses, setcourses] = useState(null);
-  const [loading, setloading] = useState(true);
 
-const  fetchdata = async () => {
-    setloading(true);
-    try {
-      let response = await fetch(api);
-      let output = await response.json();
+function Cards(props) {
+  let category = props.category;
+  let courses = props.courses;
 
-      setcourses(output.data);
-      console.log("setting the data");
-      console.log(output.data);   
-    } catch (err) {
-      toast.error("something went wrong");
-    }
-    setloading(false);
-  };
-  useEffect(() => {
-    fetchdata();
-  }, []);
-
-  console.log("error check");
+  const [likedcourses, setlikedcourses] = useState([]);
 
   const getcourses = () => {
-    let allcourses = [];
-    Object.values(courses).forEach((coursecategory) => {
-      coursecategory.forEach((course) => {
-        allcourses.push(course);
+  
+    if (category === "All") {
+      let allcourses = [];
+      Object.values(courses).forEach((coursecategory) => {
+        coursecategory.forEach((course) => {
+          allcourses.push(course);
+        });
       });
-    });
-    console.log();
-    console.log(allcourses);
-    return allcourses;
+
+      return allcourses;
+    } else {
+      if (Array.isArray(courses[category])) {
+        return courses[category];
+      } else {
+        return [];
+      }
+    }
   };
+  
+  
+// len = 0;
+ if (courses === null) {
+   return (
+     <div className="flex flex-wrap justify-center gap-4 mb-4">
+       <h1 className="text-center text-gray-400 text-5xl">No Data Found...</h1>
+     </div>
+   );
+ } else if (courses.length === 0) {
+   return (
+     <div className="flex flex-wrap justify-center gap-4 mb-4">
+       <h1 className="text-center text-gray-400 text-5xl">No Data Found...</h1>
+     </div>
+   );
+ }
 
   return (
     <div className="flex flex-wrap justify-center gap-4 mb-4">
-      {loading ? (
-        <Spinner /> 
-      ) : (
-        getcourses().map((course) => {
-          return <Card key={course.id} course={course} />;
-        })
-      )}
+      {getcourses().map((course) => {
+        return (
+          <Card
+            key={course.id}
+            course={course}
+            likedcourses={likedcourses}
+            setlikedcourses={setlikedcourses}
+          />
+        );
+      })}
     </div>
   );
 }
